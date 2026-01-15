@@ -19,7 +19,7 @@ const StartPage: React.FC<{ onStart: (mode: QuizMode) => void }> = ({ onStart })
         压抑
       </div>
     </div>
-    
+
     <h1 className="text-4xl font-black mb-4 tracking-tighter">你压抑吗？</h1>
     <p className="text-gray-400 mb-12 max-w-sm">
       在精英主义的崩坏中寻找底层逻辑，<br/>
@@ -27,28 +27,28 @@ const StartPage: React.FC<{ onStart: (mode: QuizMode) => void }> = ({ onStart })
     </p>
 
     <div className="space-y-4 w-full max-w-xs">
-      <button 
+      <button
         onClick={() => onStart(QuizMode.NORMAL)}
         className="w-full py-4 bg-[#F97316] text-black font-bold text-lg hover:bg-orange-600 transition-colors uppercase tracking-widest"
       >
         普通版：1分钟速测
       </button>
-      <button 
+      <button
         onClick={() => onStart(QuizMode.DETAILED)}
         className="w-full py-4 border-2 border-[#F97316] text-[#F97316] font-bold text-lg hover:bg-[#F97316] hover:text-black transition-all uppercase tracking-widest"
       >
         详细版：SCL-90 硬核分析
       </button>
     </div>
-    
+
     <p className="mt-8 text-xs text-gray-500 italic">
       * 本测试不具备医疗效力，纯属抽象艺术交流
     </p>
   </div>
 );
 
-const QuizPage: React.FC<{ 
-  state: QuizState; 
+const QuizPage: React.FC<{
+  state: QuizState;
   onAnswer: (questionId: string, value: number) => void;
 }> = ({ state, onAnswer }) => {
   const questions = state.mode === QuizMode.NORMAL ? NORMAL_QUESTIONS : DETAILED_QUESTIONS;
@@ -112,7 +112,7 @@ const QuizPage: React.FC<{
           )}
         </div>
       </div>
-      
+
       <div className="mt-8 text-center text-[10px] text-gray-600 uppercase tracking-widest font-mono">
         Suburban Failure Aesthetics Lab
       </div>
@@ -175,7 +175,7 @@ const ResultPage: React.FC<{ result: QuizResult; onReset: () => void }> = ({ res
           </p>
         </div>
 
-        <button 
+        <button
           onClick={onReset}
           className="w-full py-4 border border-gray-700 text-gray-500 font-bold hover:text-white hover:border-white transition-all uppercase tracking-widest text-sm"
         >
@@ -212,7 +212,7 @@ export default function App() {
 
   const calculateResult = useCallback(async (finalAnswers: Record<string, number>, currentMode: QuizMode) => {
     setIsLoading(true);
-    
+
     let overallScore = 0;
     let factorScores: Record<string, number> = {};
 
@@ -220,7 +220,7 @@ export default function App() {
       // Normal mode logic
       const total = (Object.values(finalAnswers) as number[]).reduce((a, b) => a + b, 0);
       overallScore = Math.min(Math.round((total / 18) * 100), 100);
-      
+
       NORMAL_QUESTIONS.forEach(q => {
         factorScores[q.dimension] = ((finalAnswers[q.id] || 0) / 3) * 100;
       });
@@ -253,7 +253,7 @@ export default function App() {
   const handleAnswer = (qid: string, val: number) => {
     const nextAnswers = { ...state.answers, [qid]: val };
     const questions = state.mode === QuizMode.NORMAL ? NORMAL_QUESTIONS : DETAILED_QUESTIONS;
-    
+
     if (state.currentQuestionIndex >= questions.length - 1) {
       // Last question answered - calculate results
       setState(prev => ({ ...prev, answers: nextAnswers, currentQuestionIndex: prev.currentQuestionIndex + 1 }));
@@ -279,7 +279,7 @@ export default function App() {
   return (
     <div className="min-h-screen relative bg-[#1A1A1A] text-white">
       <FlickerOverlay />
-      
+
       {isLoading && (
         <div className="fixed inset-0 bg-black/95 z-[100] flex flex-col items-center justify-center p-8 text-center">
           <div className="w-20 h-20 relative mb-8">
@@ -294,11 +294,11 @@ export default function App() {
       )}
 
       {state.mode === QuizMode.HOME && <StartPage onStart={startQuiz} />}
-      
+
       {(state.mode === QuizMode.NORMAL || state.mode === QuizMode.DETAILED) && (
-        <QuizPage 
-          state={state} 
-          onAnswer={handleAnswer} 
+        <QuizPage
+          state={state}
+          onAnswer={handleAnswer}
         />
       )}
 
